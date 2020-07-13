@@ -6,8 +6,6 @@
 //  Copyright © 2020 Lysytsia Yurii. All rights reserved.
 //
 
-import Foundation
-
 public protocol IdentificableView: class {
     
     /// Unique view identefier. Default is `String(describing: self)`

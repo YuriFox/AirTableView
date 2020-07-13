@@ -17,6 +17,7 @@
 		5BD80C1B24BCDED20066F145 /* IdentificableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C1A24BCDED20066F145 /* IdentificableView.swift */; };
 		5BD80C1D24BCDEDB0066F145 /* ConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C1C24BCDEDB0066F145 /* ConfigurableView.swift */; };
 		5BD80C2024BCE2D30066F145 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C1F24BCE2D30066F145 /* Array+Extension.swift */; };
+		5BD80C2224BCEB4A0066F145 /* ViewHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C2124BCEB4A0066F145 /* ViewHeight.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		5BD80C1A24BCDED20066F145 /* IdentificableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentificableView.swift; sourceTree = "<group>"; };
 		5BD80C1C24BCDEDB0066F145 /* ConfigurableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurableView.swift; sourceTree = "<group>"; };
 		5BD80C1F24BCE2D30066F145 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		5BD80C2124BCEB4A0066F145 /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				5B69CD7724BCD3C500BF1548 /* AirTableView.h */,
+				5B69CD9424BCD9EB00BF1548 /* Section.swift */,
 				5B69CD9324BCD9E500BF1548 /* Protocols */,
 				5B69CD8F24BCD94800BF1548 /* Models */,
 				5B69CD8E24BCD87100BF1548 /* Source */,
@@ -88,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				5B69CD9024BCD95000BF1548 /* RowHeight.swift */,
+				5BD80C2124BCEB4A0066F145 /* ViewHeight.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -103,7 +107,6 @@
 		5B69CD9324BCD9E500BF1548 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				5B69CD9424BCD9EB00BF1548 /* Section.swift */,
 				5BD80C1A24BCDED20066F145 /* IdentificableView.swift */,
 				5BD80C1824BCDEC30066F145 /* NibLoadableView.swift */,
 				5BD80C1C24BCDEDB0066F145 /* ConfigurableView.swift */,
@@ -195,6 +198,7 @@
 				5B69CD9124BCD95000BF1548 /* RowHeight.swift in Sources */,
 				5BD80C2024BCE2D30066F145 /* Array+Extension.swift in Sources */,
 				5B69CD8C24BCD86800BF1548 /* TableViewPresenterProtocol.swift in Sources */,
+				5BD80C2224BCEB4A0066F145 /* ViewHeight.swift in Sources */,
 				5B69CD8D24BCD86800BF1548 /* TableViewControllerProtocol.swift in Sources */,
 				5BD80C1D24BCDEDB0066F145 /* ConfigurableView.swift in Sources */,
 				5B69CD8B24BCD86800BF1548 /* TableViewData.swift in Sources */,

@@ -213,6 +213,9 @@ extension TableViewData: UITableViewDelegate {
         }
         
         switch self.output.tableHeaderHeight(for: section) {
+        case .none:
+            return 0
+            
         case .fixed(let height):
             self.estimatedHeightsForHeader[section] = height
             return height
@@ -258,6 +261,9 @@ extension TableViewData: UITableViewDelegate {
         }
         
         switch self.output.tableFooterHeight(for: section) {
+        case .none:
+            return 0
+            
         case .fixed(let height):
             self.estimatedHeightsForFooter[section] = height
             return height
