@@ -1,8 +1,8 @@
 //
 //  TableViewData.swift
-//  AppSpace
+//  AirTableView
 //
-//  Created by Lysytsia Yurii on 03.07.2020.
+//  Created by Lysytsia Yurii on 13.07.2020.
 //  Copyright © 2020 Lysytsia Yurii. All rights reserved.
 //
 
@@ -40,7 +40,7 @@ class TableViewData: NSObject {
         self.output = output
     }
     
-    // MARK: Functions
+    // MARK: Reload
     
     /// Reload all (remove cache) table view data
     func reloadAll() {
@@ -48,6 +48,8 @@ class TableViewData: NSObject {
         self.estimatedHeightsForHeader.removeAll()
         self.estimatedHeightsForFooter.removeAll()
     }
+    
+    // MARK: Sections
     
     /// Reload (remove cache) for specific section of table view data
     func reloadSection(_ section: Int) {
@@ -67,6 +69,31 @@ class TableViewData: NSObject {
         sections.forEach { self.reloadSection($0) }
     }
     
+    /// Remove cache for specific section of table view data
+    func removeSections(_ sections: [Int]) {
+        sections.sorted(by: >).forEach {
+            self.estimatedHeightsForRow.remove(at: $0)
+            self.estimatedHeightsForHeader.remove(at: $0)
+            self.estimatedHeightsForFooter.remove(at: $0)
+        }
+    }
+    
+    /// Insert `UITableView.automaticDimension` cache for specific section of table view data
+    func insertSections(_ sections: [Int]) {
+        sections.sorted().forEach {
+            self.estimatedHeightsForRow.insert([], at: $0)
+            self.estimatedHeightsForHeader.insert(UITableView.automaticDimension, at: $0)
+            self.estimatedHeightsForFooter.insert(UITableView.automaticDimension, at: $0)
+        }
+    }
+    
+    func moveSection(from section: Int, to newSection: Int) {
+        self.removeSections([section])
+        self.insertSections([section])
+    }
+    
+    // MARK: Rows
+    
     /// Reload (remove cache) for specific index path of table view data
     func reloadRow(at indexPath: IndexPath) {
         guard self.estimatedHeightsForRow.indices.contains(indexPath.section) else {
@@ -81,6 +108,44 @@ class TableViewData: NSObject {
     /// Reload (remove cache) for specific index paths of table view data. It's the same as `reloadRow(at:)` but for multiple index paths
     func reloadRows(at indexPaths: [IndexPath]) {
         indexPaths.forEach { self.reloadRow(at: $0) }
+    }
+    
+    /// Remove cache for specific index path of table view data
+    @discardableResult
+    func removeRow(at indexPath: IndexPath) -> CGFloat? {
+        guard self.estimatedHeightsForRow.indices.contains(indexPath.section) else {
+            return nil
+        }
+        guard self.estimatedHeightsForRow[indexPath.section].indices.contains(indexPath.row) else {
+            return nil
+        }
+        return self.estimatedHeightsForRow[indexPath.section].remove(at: indexPath.row)
+    }
+    
+    /// Remove cache for specific index paths of table view data. It's the same as `removeRow(at:)` but for multiple index paths
+    func removeRows(at indexPaths: [IndexPath]) {
+        indexPaths.sorted(by: >).forEach { self.removeRow(at: $0) }
+    }
+    
+    /// Insert with specific height or `UITableView.automaticDimension` (by default) cache for specific index path of table view data
+    func insertRow(at indexPath: IndexPath, height: CGFloat = UITableView.automaticDimension) {
+        guard self.estimatedHeightsForRow.indices.contains(indexPath.section) else {
+            return
+        }
+        self.estimatedHeightsForRow[indexPath.section].insert(UITableView.automaticDimension, at: indexPath.row)
+    }
+    
+    /// Insert `UITableView.automaticDimension` cache for specific index paths of table view data. It's the same as `insertRow(at:)` but for multiple index paths
+    func insertRows(at indexPaths: [IndexPath]) {
+        indexPaths.sorted().forEach { self.insertRow(at: $0) }
+    }
+    
+    // Delte cache for specific index path of table view data and insert it to new index path.
+    func moveRow(from indexPath: IndexPath, to newIndexPath: IndexPath) {
+        guard let height = self.removeRow(at: indexPath) else {
+            return
+        }
+        self.insertRow(at: newIndexPath, height: height)
     }
     
     // MARK: Configure
@@ -158,7 +223,7 @@ extension TableViewData: UITableViewDelegate {
     
     // MARK: Cell
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let height = self.estimatedHeightsForRow[safe: indexPath.section]?[safe: indexPath.row] {
+        if let height = self.estimatedHeightsForRow[safe: indexPath.section]?[safe: indexPath.row], height != UITableView.automaticDimension {
             return height
         }
         
@@ -208,7 +273,7 @@ extension TableViewData: UITableViewDelegate {
     
     // MARK: Header
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        if let height = self.estimatedHeightsForHeader[safe: section] {
+        if let height = self.estimatedHeightsForHeader[safe: section], height != UITableView.automaticDimension {
             return height
         }
         
@@ -235,7 +300,7 @@ extension TableViewData: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if let height = self.estimatedHeightsForHeader[safe: section] {
+        if let height = self.estimatedHeightsForHeader[safe: section], height != UITableView.automaticDimension {
             return height
         } else {
             return self.tableView(tableView, estimatedHeightForHeaderInSection: section)

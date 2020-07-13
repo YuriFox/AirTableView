@@ -7,7 +7,7 @@
 //
 
 // MARK: - ConfigurableView
-protocol ConfigurableView: IdentificableView {
+public protocol ConfigurableView: IdentificableView {
     
     /// Configure view with some non specific model
     func configure(model: Any?)
@@ -15,7 +15,7 @@ protocol ConfigurableView: IdentificableView {
 }
 
 // MARK: - ModelConfigurableView
-protocol ModelConfigurableView: ConfigurableView {
+public protocol ModelConfigurableView: ConfigurableView {
     
     /// Configure view with some specific model type
     func configure(model: Model)
@@ -24,7 +24,7 @@ protocol ModelConfigurableView: ConfigurableView {
     
 }
 
-extension ModelConfigurableView {
+public extension ModelConfigurableView {
     
     func configure(model: Any?) {
         guard let configurableModel = model as? Model else {

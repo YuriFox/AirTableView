@@ -1,8 +1,8 @@
 //
 //  TableViewPresenterProtocol.swift
-//  AppSpace
+//  AirTableView
 //
-//  Created by Lysytsia Yurii on 03.07.2020.
+//  Created by Lysytsia Yurii on 13.07.2020.
 //  Copyright © 2020 Lysytsia Yurii. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 import class UIKit.UITableView
 import class UIKit.UISwipeActionsConfiguration
 
-protocol TableViewPresenterProtocol: class {
+public protocol TableViewPresenterProtocol: class {
     
     /// Number of sections in the table view
     var tableSections: Int { get }
@@ -62,7 +62,7 @@ protocol TableViewPresenterProtocol: class {
     
 }
 
-extension TableViewPresenterProtocol {
+public extension TableViewPresenterProtocol {
     
     // MARK: Row
     func tableRowDidSelect(at indexPath: IndexPath) {
