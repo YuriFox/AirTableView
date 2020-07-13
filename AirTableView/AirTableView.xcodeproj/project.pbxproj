@@ -19,6 +19,8 @@
 		5BD80C2024BCE2D30066F145 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C1F24BCE2D30066F145 /* Array+Extension.swift */; };
 		5BD80C2224BCEB4A0066F145 /* ViewHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C2124BCEB4A0066F145 /* ViewHeight.swift */; };
 		5BD80C2424BD0A2E0066F145 /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C2324BD0A2E0066F145 /* UITableView+Extension.swift */; };
+		5BD80C2624BD0AD80066F145 /* TextViewInputModelConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C2524BD0AD80066F145 /* TextViewInputModelConfigurable.swift */; };
+		5BD80C2824BD0B5B0066F145 /* TextFieldInputModelConfigurable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD80C2724BD0B5B0066F145 /* TextFieldInputModelConfigurable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		5BD80C1F24BCE2D30066F145 /* Array+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 		5BD80C2124BCEB4A0066F145 /* ViewHeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewHeight.swift; sourceTree = "<group>"; };
 		5BD80C2324BD0A2E0066F145 /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
+		5BD80C2524BD0AD80066F145 /* TextViewInputModelConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewInputModelConfigurable.swift; sourceTree = "<group>"; };
+		5BD80C2724BD0B5B0066F145 /* TextFieldInputModelConfigurable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldInputModelConfigurable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,8 @@
 				5BD80C1A24BCDED20066F145 /* IdentificableView.swift */,
 				5BD80C1824BCDEC30066F145 /* NibLoadableView.swift */,
 				5BD80C1C24BCDEDB0066F145 /* ConfigurableView.swift */,
+				5BD80C2724BD0B5B0066F145 /* TextFieldInputModelConfigurable.swift */,
+				5BD80C2524BD0AD80066F145 /* TextViewInputModelConfigurable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -200,6 +206,8 @@
 				5BD80C1924BCDEC30066F145 /* NibLoadableView.swift in Sources */,
 				5B69CD9624BCDA7700BF1548 /* Section.swift in Sources */,
 				5B69CD9124BCD95000BF1548 /* RowHeight.swift in Sources */,
+				5BD80C2824BD0B5B0066F145 /* TextFieldInputModelConfigurable.swift in Sources */,
+				5BD80C2624BD0AD80066F145 /* TextViewInputModelConfigurable.swift in Sources */,
 				5BD80C2024BCE2D30066F145 /* Array+Extension.swift in Sources */,
 				5B69CD8C24BCD86800BF1548 /* TableViewPresenterProtocol.swift in Sources */,
 				5BD80C2224BCEB4A0066F145 /* ViewHeight.swift in Sources */,
