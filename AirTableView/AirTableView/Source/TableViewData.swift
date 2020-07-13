@@ -152,11 +152,11 @@ class TableViewData: NSObject {
     
     /// Configure table view cell with some model. Cell must implement `ConfigurableView` protocol.
     func configureCell(_ cell: UITableViewCell, for indexPath: IndexPath) {
-        guard let configurableCell = cell as? ConfigurableView else {
-            assertionFailure("For use `TableViewData.configureCell(_:for:)`and configure cell you must implement `ConfigurableView` protocol for cell type `\(type(of: cell))`")
+        guard let model = self.output.tableRowModel(for: indexPath) else {
             return
         }
-        guard let model = self.output.tableRowModel(for: indexPath) else {
+        guard let configurableCell = cell as? ConfigurableView else {
+            assertionFailure("For use `TableViewData.configureCell(_:for:)`and configure cell you must implement `ConfigurableView` protocol for cell type `\(type(of: cell))`")
             return
         }
         configurableCell.configure(model: model)
@@ -164,11 +164,11 @@ class TableViewData: NSObject {
     
     /// Configure table header view with some model. Header view must implement `ConfigurableView` protocol.
     func configureHeaderView(_ view: UITableViewHeaderFooterView, for section: Int) {
-        guard let configurableView = view as? ConfigurableView else {
-            assertionFailure("For use `TableViewData.configureHeaderView(_:for:)`and configure header view you must implement `ConfigurableView` protocol for header view type `\(type(of: view))`")
+        guard let model = self.output.tableHeaderModel(for: section) else {
             return
         }
-        guard let model = self.output.tableHeaderModel(for: section) else {
+        guard let configurableView = view as? ConfigurableView else {
+            assertionFailure("For use `TableViewData.configureHeaderView(_:for:)`and configure header view you must implement `ConfigurableView` protocol for header view type `\(type(of: view))`")
             return
         }
         configurableView.configure(model: model)
@@ -176,11 +176,11 @@ class TableViewData: NSObject {
     
     /// Configure table footer view with some model. Footer view must implement `ConfigurableView` protocol.
     func configureFooterView(_ view: UITableViewHeaderFooterView, for section: Int) {
-        guard let configurableView = view as? ConfigurableView else {
-            assertionFailure("For use `TableViewData.configureFooterView(_:for:)`and configure footer view you must implement `ConfigurableView` protocol for footer view type `\(type(of: view))`")
+        guard let model = self.output.tableFooterModel(for: section) else {
             return
         }
-        guard let model = self.output.tableFooterModel(for: section) else {
+        guard let configurableView = view as? ConfigurableView else {
+            assertionFailure("For use `TableViewData.configureFooterView(_:for:)`and configure footer view you must implement `ConfigurableView` protocol for footer view type `\(type(of: view))`")
             return
         }
         configurableView.configure(model: model)
@@ -192,11 +192,17 @@ class TableViewData: NSObject {
 extension TableViewData: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        let sections = self.output.tableSections
+        self.estimatedHeightsForRow = [[CGFloat]](repeating: [], count: sections)
+        self.estimatedHeightsForHeader = [CGFloat](repeating: UITableView.automaticDimension, count: sections)
+        self.estimatedHeightsForFooter = [CGFloat](repeating: UITableView.automaticDimension, count: sections)
         return self.output.tableSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.output.tableRows(for: section)
+        let rows = self.output.tableRows(for: section)
+        self.estimatedHeightsForRow[section] = [CGFloat](repeating: UITableView.automaticDimension, count: rows)
+        return rows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -234,9 +240,9 @@ extension TableViewData: UITableViewDelegate {
             
         case .flexible:
             let cell = self.tableView(tableView, cellForRowAt: indexPath)
-            cell.layoutIfNeeded()
+            cell.contentView.layoutIfNeeded()
             let targetSize = CGSize(width: tableView.frame.width, height: CGFloat.greatestFiniteMagnitude)
-            let prefferedSize = cell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+            let prefferedSize = cell.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
             let height = prefferedSize.height
             self.estimatedHeightsForRow[indexPath.section][indexPath.row] = height
             return height
@@ -286,10 +292,11 @@ extension TableViewData: UITableViewDelegate {
             return height
             
         case .flexible:
-            guard let view = self.tableView(tableView, viewForHeaderInSection: section) else {
+            guard let view = self.tableView(tableView, viewForHeaderInSection: section) as? UITableViewHeaderFooterView else {
                 assertionFailure("View for header in section `\(section)` is nil")
                 return UITableView.automaticDimension
             }
+            
             view.layoutIfNeeded()
             let targetSize = CGSize(width: tableView.frame.width, height: CGFloat.greatestFiniteMagnitude)
             let prefferedSize = view.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)

@@ -10,10 +10,18 @@ import class UIKit.UITableView
 import class UIKit.UITableViewCell
 import class UIKit.UITableViewHeaderFooterView
 
-extension UITableView {
+public extension UITableView {
+    
+    func register<T: UITableViewCell>(_ cellClass: T.Type) where T: IdentificableView {
+        self.register(cellClass, forCellReuseIdentifier: cellClass.viewIdentifier)
+    }
     
     func register<T: UITableViewCell>(_ cellClass: T.Type) where T: NibLoadableView {
         self.register(cellClass.nib(), forCellReuseIdentifier: cellClass.viewIdentifier)
+    }
+    
+    func register<T: UITableViewHeaderFooterView>(_ viewClass: T.Type) where T: IdentificableView {
+        self.register(viewClass, forHeaderFooterViewReuseIdentifier: viewClass.viewIdentifier)
     }
     
     func register<T: UITableViewHeaderFooterView>(_ viewClass: T.Type) where T: NibLoadableView {
