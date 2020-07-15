@@ -22,10 +22,10 @@ public protocol TableViewControllerProtocol: class {
     /// - Parameter configurator: Use this block to set up the table view. You should register table view cell, headers and footer is this case
     func configureTableView(configurator: (UITableView) -> Void)
     
-    /// Reload table view data and table view rows
+    /// Reloads the rows and sections of the table view
     func reloadTableView()
     
-    /// Begin update table view data and table view rows.
+    /// Begin update table view data and table view rows
     /// - Parameters:
     ///   - updates: Use this block to call update methods for table view. You should call `reloadTableViewRows(at:with:)`, `deleteTableViewRows(at:with:)`, `insertTableViewRows(at:with:)`
     ///   - completion: A completion handler block to execute when all of the operations are finished
@@ -41,13 +41,13 @@ public protocol TableViewControllerProtocol: class {
     func insertTableViewRows(at indexPaths: [IndexPath], with animation: UITableView.RowAnimation)
     
     /// Moves the row at a specified location to a destination location
-    func moveTableViewRows(at indexPath: IndexPath, to newIndexPath: IndexPath)
+    func moveTableViewRow(at indexPath: IndexPath, to newIndexPath: IndexPath)
     
     /// Selects a row in the table view identified by index path, optionally scrolling the row to a location in the table view
     func selectTableViewRow(at indexPath: IndexPath, animated: Bool, scrollPosition: UITableView.ScrollPosition)
     
     /// Deselects a given row identified by index path, with an option to animate the deselection.
-    func deselectRow(at indexPath: IndexPath, animated: Bool)
+    func deselectTableViewRow(at indexPath: IndexPath, animated: Bool)
     
     /// Reloads the specified sections using a given animation effect
     func reloadTableViewSections(_ sections: [Int], with animation: UITableView.RowAnimation)
@@ -149,7 +149,11 @@ public extension TableViewControllerProtocol {
         self.insertTableViewRows(at: indexPaths, with: .automatic)
     }
     
-    func moveTableViewRows(at indexPath: IndexPath, to newIndexPath: IndexPath) {
+    func moveTableViewRow(at indexPath: IndexPath, to newIndexPath: IndexPath) {
+        guard self.isPerformBatchUpdatesCalled else {
+            assertionFailure("You must call `updateTableView(updates:completion:)` and call this method inside `updates` block")
+            return
+        }
         self.tableViewData.moveRow(from: indexPath, to: newIndexPath)
         self.tableViewSource.moveRow(at: indexPath, to: newIndexPath)
     }
@@ -158,7 +162,7 @@ public extension TableViewControllerProtocol {
         self.tableViewSource.selectRow(at: indexPath, animated: animated, scrollPosition: scrollPosition)
     }
     
-    func deselectRow(at indexPath: IndexPath, animated: Bool) {
+    func deselectTableViewRow(at indexPath: IndexPath, animated: Bool) {
         self.tableViewSource.deselectRow(at: indexPath, animated: animated)
     }
     

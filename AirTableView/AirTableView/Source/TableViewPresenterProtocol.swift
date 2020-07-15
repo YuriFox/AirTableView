@@ -87,7 +87,7 @@ public extension TableViewPresenterProtocol {
     }
     
     func tableHeaderHeight(for section: Int) -> UITableView.ViewHeight {
-        return .none
+        return self.tableHeaderIdentifier(for: section) == nil ? .none : .flexible
     }
     
     func tableHeaderModel(for section: Int) -> Any? {
@@ -100,7 +100,7 @@ public extension TableViewPresenterProtocol {
     }
     
     func tableFooterHeight(for section: Int) -> UITableView.ViewHeight {
-        return .none
+        return self.tableFooterIdentifier(for: section) == nil ? .none : .flexible
     }
     
     func tableFooterModel(for section: Int) -> Any? {

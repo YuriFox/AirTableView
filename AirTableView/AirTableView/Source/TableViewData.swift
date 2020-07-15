@@ -7,19 +7,23 @@
 //
 
 import struct CoreGraphics.CGFloat
+import struct CoreGraphics.CGPoint
 import struct CoreGraphics.CGSize
+import class UIKit.UIScrollView
 import class UIKit.UITableView
 import class UIKit.UITableViewCell
 import class UIKit.UITableViewHeaderFooterView
 import class UIKit.UISwipeActionsConfiguration
 import class UIKit.UIView
 import protocol UIKit.UITableViewDataSource
+import protocol UIKit.UIScrollViewDelegate
 import protocol UIKit.UITableViewDelegate
 
 /// Data for building `UITableView` based on `UITableViewDataSource` and `UITableViewDelegate`
 class TableViewData: NSObject {
 
     // MARK: Stored properties
+    private weak var scrollViewDelegate: UIScrollViewDelegate?
     
     /// Array of sections (array of rows) with estimated sizes for table view row. First array is equal to `IndexPath.section`, second to `IndexPath.row`
     private var estimatedHeightsForRow = [[CGFloat]]()
@@ -132,7 +136,7 @@ class TableViewData: NSObject {
         guard self.estimatedHeightsForRow.indices.contains(indexPath.section) else {
             return
         }
-        self.estimatedHeightsForRow[indexPath.section].insert(UITableView.automaticDimension, at: indexPath.row)
+        self.estimatedHeightsForRow[indexPath.section].insert(height, at: indexPath.row)
     }
     
     /// Insert `UITableView.automaticDimension` cache for specific index paths of table view data. It's the same as `insertRow(at:)` but for multiple index paths
@@ -186,6 +190,11 @@ class TableViewData: NSObject {
         configurableView.configure(model: model)
     }
     
+    // MARK: Forward
+    func forwardScrollViewDelegate(to scrollViewDelegate: UIScrollViewDelegate?) {
+        self.scrollViewDelegate = scrollViewDelegate
+    }
+    
 }
 
 // MARK: UITableViewDataSource
@@ -220,6 +229,63 @@ extension TableViewData: UITableViewDataSource {
  
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return self.output.tableSectionIndexTitles(for: tableView)
+    }
+    
+}
+
+// MARK: - UIScrollViewDelegate
+extension TableViewData: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewDidScroll?(scrollView)
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewDidScroll?(scrollView)
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.scrollViewDelegate?.scrollViewWillEndDragging?(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        self.scrollViewDelegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+    }
+
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewWillBeginDecelerating?(scrollView)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewDidEndDecelerating?(scrollView)
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
+    }
+
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return self.scrollViewDelegate?.viewForZooming?(in: scrollView)
+    }
+
+    func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
+        self.scrollViewDelegate?.scrollViewWillBeginZooming?(scrollView, with: view)
+    }
+
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        self.scrollViewDelegate?.scrollViewDidEndZooming?(scrollView, with: view, atScale: scale)
+    }
+
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
+        return self.scrollViewDelegate?.scrollViewShouldScrollToTop?(scrollView) ?? true
+    }
+
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewDidScrollToTop?(scrollView)
     }
     
 }
